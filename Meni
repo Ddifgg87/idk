@@ -241,7 +241,7 @@ commands = {
 			
 			if plr then
 				bot.Character:SetPrimaryPartCFrame(CFrame.new(plr.Character.HumanoidRootPart.Position))
-				chat("ðŸ“¸ CAUGHT IN 4K BY CHATBOT ðŸ“¸")
+				chat("📸 CAUGHT IN 4K BY CHATBOT 📸")
 			end
 		end,
 	},
