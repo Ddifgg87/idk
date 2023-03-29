@@ -95,6 +95,7 @@ local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
     "ALL COMMANDS ARE WRITTEN WITH A DOT.FOR EXAMPLE: (.sit)",
+        wait(1)
 	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
 	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
 	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
@@ -138,7 +139,7 @@ commands = {
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
-                    wait(3)
+
 					chat(cmd)
 					wait(8)
 				end
