@@ -139,6 +139,7 @@ commands = {
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
 					chat(cmd)
+      wait(7)
 				end
 			end)
 		end,
