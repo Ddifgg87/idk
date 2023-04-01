@@ -20,7 +20,7 @@ local whitelisted = {
 local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or ChatBot to begin with [ChatBot]
 local allwhitelisted = _G.defaultAllWhitelisted or true --set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
 local randommoveinteger = _G.defaultRandomMoveInteger or 15 --interval in which how long randommove waits until choosing another direction
-local prefix = _G.defaultPrefix or "." --DO NOT SET TO MORE THAN 1 CHARACTER!
+local prefix = _G.defaultPrefix or "!" --DO NOT SET TO MORE THAN 1 CHARACTER!
 
 if _G.preWhitelisted and type(_G.preWhitelisted) == "table" then
 	for i, v in pairs(_G.preWhitelisted) do
@@ -35,7 +35,7 @@ end
 
 --[[ end configs, don't edit this especially if you have no idea what Lua is lmao ]]--
 
-local Chatbotversion = "v0.1.0 Public Beta Release"
+local Chatbotversion = "v0.10 Public Beta Release"
 local Chatbotchangelogs = "Added a few commands!"
 
 local gameData = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
@@ -95,10 +95,12 @@ local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
 	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
+ "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
 	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
+ "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
 	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
 	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium",
-        "ALL COMMANDS ARE WRITTEN WITH A DOT.FOR EXAMPLE: (.sit)",
+ "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
 }
 
 local commands --don't change, could lead to errors
