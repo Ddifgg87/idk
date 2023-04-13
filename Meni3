@@ -1218,7 +1218,7 @@ if req ~= nil then
 	   })
 	})
 end
-
+ 
 task.spawn(function()
 	chat("ChatBot " .. Chatbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
 	wait(0.1)
@@ -1226,9 +1226,11 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	while wait(300) do
+	while wait(100) do
 		if disconnected == false then
 			chat("ChatBot is currently active! Type " .. prefix .. "control to view commands.")
+    wait(5)
+    chat("ALL COMMANDS ARE WRITTEN WITH A SLASH(/).FOR EXAMPLE: (/sit)")
 		end
 	end
 end)
