@@ -205,7 +205,7 @@ commands = {
 		Name = "cmds",
 		Aliases = {"commands"},
 		Use = "Lists all commands!",
-		Enabled = true,
+		Enabled = false,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
