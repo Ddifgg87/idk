@@ -38,7 +38,7 @@ local one = "control my avatar say !control"
 typewrite(one)
 
 function onPlayerChatted(message, player)
-    if string.sub(message, 1, 1) == "!" then
+    if string.sub(message, 1, 1) == "/" then
         local command = string.sub(message, 2)
         if command == "control" then
             local now = os.time() -- Получить текущее время
@@ -47,14 +47,14 @@ function onPlayerChatted(message, player)
                 typewrite("cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>")
                 wait(15)
                 typewrite("setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow")
-                wait(15)
+                wait(10)
                 typewrite("salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor")
-                wait(15)
+                wait(10)
                 typewrite("lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium")
                 wait(10)
                 typewrite(one)
             else
-                game:GetService("Chat"):Chat(player.Character.Head, player.Name .. ", the !control command is unavailable. Please wait for " .. tostring(cooldown) .. " second(s).", "White") -- Вывести сообщение о кулдауне в чат игры с именем игрока
+                game:GetService("Chat"):Chat(player.Character.Head, player.Name .. ", the /control command is unavailable. Please wait for " .. tostring(cooldown) .. " second(s).", "White") -- Вывести сообщение о кулдауне в чат игры с именем игрока
             end
         end
     end
@@ -91,7 +91,7 @@ local whitelisted = {
 local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or ChatBot to begin with [ChatBot]
 local allwhitelisted = _G.defaultAllWhitelisted or true --set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
 local randommoveinteger = _G.defaultRandomMoveInteger or 15 --interval in which how long randommove waits until choosing another direction
-local prefix = _G.defaultPrefix or "!" --DO NOT SET TO MORE THAN 1 CHARACTER!
+local prefix = _G.defaultPrefix or "/" --DO NOT SET TO MORE THAN 1 CHARACTER!
 
 if _G.preWhitelisted and type(_G.preWhitelisted) == "table" then
 	for i, v in pairs(_G.preWhitelisted) do
@@ -1228,7 +1228,7 @@ end)
 task.spawn(function()
 	while wait(300) do
 		if disconnected == false then
-			chat("ChatBot is currently active! Type " .. prefix .. "cmds to view commands.")
+			chat("ChatBot is currently active! Type " .. prefix .. "control to view commands.")
 		end
 	end
 end)
