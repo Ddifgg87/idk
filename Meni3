@@ -34,7 +34,7 @@ function typewrite(text)
     end
 end
 
-local one = "control my avatar say !control"
+local one = "control my avatar say /control"
 typewrite(one)
 
 function onPlayerChatted(message, player)
