@@ -12,7 +12,7 @@ b:Label("Script for self bot",{
 }) 
 
 b:Button("Booth",function()
-    local cooldown = 30 -- Время в секундах, в течение которого игрок не может использовать команду после первого использования
+    local cooldown = 5 -- Время в секундах, в течение которого игрок не может использовать команду после первого использования
 local lastUsed = {} -- Таблица для хранения времени последнего использования команды для каждого игрока
 local imageIndex = 1 -- Индекс изображения
 
@@ -216,7 +216,7 @@ commands = {
 		Name = "cmds",
 		Aliases = {"commands"},
 		Use = "Lists all commands!",
-		Enabled = false,
+		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
