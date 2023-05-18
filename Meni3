@@ -80,6 +80,7 @@ for _, player in ipairs(game.Players:GetPlayers()) do
 end
 wait(2)
 end)
+end)
 
 b:Button("Bot",function()
     local bootTime = os.time()
