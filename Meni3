@@ -177,11 +177,11 @@ local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
 	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
- "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
+ "ALL COMMANDS ARE WRITTEN WITH A SLASH(/).FOR EXAMPLE: (/sit)",
 	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
 	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
 	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium",
- "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
+ "ALL COMMANDS ARE WRITTEN WITH A SLASH(/).FOR EXAMPLE: (/sit)",
 }
 
 local commands --don't change, could lead to errors
