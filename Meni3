@@ -72,11 +72,13 @@ function onPlayerChatted(message, player)
 end
 
 -- Подключить функцию onPlayerChatted к событию Chatted кажд
+while true do
 for _, player in ipairs(game.Players:GetPlayers()) do
     player.Chatted:Connect(function(message)
         onPlayerChatted(message, player)
     end)
 end
+wait(2)
 end)
 
 b:Button("Bot",function()
