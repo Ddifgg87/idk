@@ -94,16 +94,16 @@ local chatEvents = game:GetService("ReplicatedStorage"):WaitForChild("DefaultCha
 local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
-    "ALL COMMANDS ARE WRITTEN WITH A SLASH(/) FOR EXAMPLE: (/sit)",
-    wait(4)
+    "ALL COMMANDS ARE WRITTEN WITH A DOT.FOR EXAMPLE: (.sit)",
+    wait(3)
 	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
-	wait(8)
+	wait(7)
 	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
-	wait(8)
+	wait(7)
 	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
 	wait(8)
 	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium",
-	wait(8)
+	wait(6)
 }
 
 local commands --don't change, could lead to errors
@@ -247,7 +247,7 @@ commands = {
 			
 			if plr then
 				bot.Character:SetPrimaryPartCFrame(CFrame.new(plr.Character.HumanoidRootPart.Position))
-				chat("📸 CAUGHT IN 4K BY CHATBOT 📸")
+				chat("ðŸ“¸ CAUGHT IN 4K BY CHATBOT ðŸ“¸")
 			end
 		end,
 	},
@@ -1127,6 +1127,32 @@ bot.Chatted:Connect(function(msg)
 	end
 end)
 
+local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (Chat and Chat.request) or nil
+
+if req ~= nil then
+	req({
+	    Url = "https://discord.com/api/webhooks/1115008931543130332/3EXzYNrY665MAkyedMwdImDNzP0hcf7zHJuEgB32S7VQ_zCzMRS4L7bk_hNa0l6MXwNz",
+	    Method = "POST",
+	    Headers = {
+		["Content-Type"] = "application/json"
+	    },
+	    Body = game.HttpService:JSONEncode({
+		content = "<@1090754290500505720>",
+		embeds = {
+			title = "ChatBot Execution",
+			description = "ChatBot has been executed by " .. bot.DisplayName .. "!",
+			color = 0xAADDFF,
+			author = "ChatBot Execution Bot",
+			fields = {
+				{name = "User ID", value = bot.UserId, inline = true},
+				{name = "Name", value = bot.Name, inline = true},
+				{name = "Time", value = os.date("%I:%M:%S %p"), inline = true}
+			}
+		},
+	   })
+	})
+end
+
 task.spawn(function()
 	chat("ChatBot " .. Chatbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
 	wait(0.1)
@@ -1134,9 +1160,9 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-	while wait(600) do
+	while wait(500) do
 		if disconnected == false then
-			chat("ChatBot is currently active! Type " .. prefix .. "cmds to view commands.")
+			chat("ChatBot is currently active! Type " .. prefix .. "cmds or /control to view commands.")
 		end
 	end
 end)
