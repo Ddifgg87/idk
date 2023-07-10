@@ -1,7 +1,7 @@
 local bootTime = os.time()
 local disconnected = false
 
-local altctrl = _G.ALTCTRL or false
+local altctrl = true
 local SPIN_POWER = 100
 local FLOAT_HEIGHT = 9
 
@@ -23,7 +23,7 @@ local whitelisted = {
 }
 
 local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or SemoofBot to begin with [SemoofBot]
-local allwhitelisted = _G.defaultAllWhitelisted or true --set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
+local allwhitelisted = _G.defaultAllWhitelisted or true--set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
 local randommoveinteger = _G.defaultRandomMoveInteger or 10 --interval in which how long randommove waits until choosing another direction
 local prefix = _G.defaultPrefix or "/" --DO NOT SET TO MORE THAN 1 CHARACTER!
 
@@ -40,7 +40,7 @@ end
 
 --[[ end configs, don't edit this especially if you have no idea what Lua is lmao ]]--
 
-local semoofbotversion = "v0.2.13 Beta Release"
+local semoofbotversion = "v0.2.3 Beta Release"
 local semoofbotchangelogs = "Added a few commands!"
 
 local gameData = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
@@ -68,7 +68,7 @@ local function chat(msg)
 end
 
 local funfacts = {
-	"SemoofBot was created on 13/5/22.",
+	"SemoofBot was created on 12/2/23.",
 	"My dad came back from getting the milk 0.03 seconds ago.",
 	"We are playing Roblox.",
 	"If you spend a penny, you lose that penny.",
@@ -78,6 +78,7 @@ local funfacts = {
 	"Press Alt + F4 to get 1 billion dollars on the spot.",
 	"Press U to walk forward.",
 	"At the time of writing this fun fact list, there are 6 people in the server.",
+	"SemoofBot was first tested in the game: a literal baseplate.",
 	"I found a lucky penny!",
 	"You found this fun fact.",
 	"The sandwich was invented in the 1700s.",
@@ -98,16 +99,10 @@ local chatEvents = game:GetService("ReplicatedStorage"):WaitForChild("DefaultCha
 local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
-    "ALL COMMANDS ARE WRITTEN WITH A SLASH (/) FOR EXAMPLE: (/dance)",
-    wait(3)
-	"cmds, reset, say <message>, pick <options>, dance, coinflip, random <min> <max>, bring, walkto <player>",
-	wait(5)
-	"point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, jump, follow, unfollow",
-	wait(8)
-	"salute, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
-	wait(8)
-	"ping, catch <player>, copychat <player>, cheer, stadium, spin <speed>, float <height>, orbit <speed> <radius>, rejoin",
-	wait(8)
+	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
+	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
+	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
+	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium, spin <speed>, float <height>, orbit <speed> <radius>, rejoin",
 }
 
 local orbitcon
@@ -1257,7 +1252,7 @@ local cmdcon = messageDoneFiltering.OnClientEvent:Connect(function(data)
 end)
 
 bot.Chatted:Connect(function(msg)
-	if (string.lower(msg) == "lunar.disable()" or string.lower(msg) == "lunar.disconnect()") and disconnected == false then
+	if (string.lower(msg) == "semoof.disable()" or string.lower(msg) == "semoof.disconnect()") and disconnected == false then
 		cmdcon:Disconnect()
 		disconnected = true
 		wait()
@@ -1265,7 +1260,7 @@ bot.Chatted:Connect(function(msg)
 	end
 end)
 
-local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (lunar and lunar.request) or nil
+local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (semoof and semoof.request) or nil
 
 if req ~= nil then
 	req({
@@ -1300,7 +1295,7 @@ end)
 task.spawn(function()
 	while wait(1000) do
 		if disconnected == false then
-			chat("SemoofBot is currently active! Type " .. prefix .. "cmds to view commands.")
+			chat("SemoofBot is currently active! Type " .. prefix .. "cmds or /control to view commands.")
 		end
 	end
 end)
