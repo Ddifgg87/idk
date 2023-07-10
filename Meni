@@ -1,11 +1,16 @@
 local bootTime = os.time()
 local disconnected = false
 
+local altctrl = _G.ALTCTRL or false
+local SPIN_POWER = 100
+local FLOAT_HEIGHT = 9
+
 local bot = game.Players.LocalPlayer
+local HH = bot.Character.Humanoid.HipHeight
 
 for i, plr in pairs(game.Players:GetPlayers()) do
 	for i, obj in pairs(plr:GetChildren()) do
-		if obj.Name == "ChatBotBlacklist" then
+		if obj.Name == "SemoofBotBlacklist" then
 			obj:Destroy()		
 		end
 	end
@@ -17,10 +22,10 @@ local whitelisted = {
 	bot.Name,
 }
 
-local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or ChatBot to begin with [ChatBot]
+local showbotchat = _G.showBotChat or false --setting this to true will cause all messages sent by either commands or SemoofBot to begin with [SemoofBot]
 local allwhitelisted = _G.defaultAllWhitelisted or true --set to true if you want everyone to be whitelisted, nicK is not responsible for anything players make you do or say.
-local randommoveinteger = _G.defaultRandomMoveInteger or 15 --interval in which how long randommove waits until choosing another direction
-local prefix = _G.defaultPrefix or "!" --DO NOT SET TO MORE THAN 1 CHARACTER!
+local randommoveinteger = _G.defaultRandomMoveInteger or 10 --interval in which how long randommove waits until choosing another direction
+local prefix = _G.defaultPrefix or "/" --DO NOT SET TO MORE THAN 1 CHARACTER!
 
 if _G.preWhitelisted and type(_G.preWhitelisted) == "table" then
 	for i, v in pairs(_G.preWhitelisted) do
@@ -29,14 +34,14 @@ if _G.preWhitelisted and type(_G.preWhitelisted) == "table" then
 end
 
 if prefix:len() > 1 then
-	warn("ChatBot // Prefix cannot be more than 1 character long!")
+	warn("SemoofBot // Prefix cannot be more than 1 character long!")
 	return
 end
 
 --[[ end configs, don't edit this especially if you have no idea what Lua is lmao ]]--
 
-local Chatbotversion = "v0.10 Public Beta Release"
-local Chatbotchangelogs = "Added a few commands!"
+local semoofbotversion = "v0.2.13 Beta Release"
+local semoofbotchangelogs = "Added a few commands!"
 
 local gameData = game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId)
 local status = nil
@@ -56,24 +61,23 @@ local TI = TweenInfo.new(
 
 local function chat(msg)
 	if showbotchat == true then
-		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("[ChatBot]: " .. msg, "All")
+		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer("[SemoofBot]: " .. msg, "All")
 	else
 		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
 	end
 end
 
 local funfacts = {
-	"ChatBot was created on 1/04/23.",
+	"SemoofBot was created on 13/5/22.",
 	"My dad came back from getting the milk 0.03 seconds ago.",
 	"We are playing Roblox.",
 	"If you spend a penny, you lose that penny.",
 	"Press 'Y' to jump.",
-	"Commands are added to ChatBot almost every day.",
+	"SemoofBot is a self-bot, meaning that, yes, I AM A REAL PERSON. I'm watching!",
 	"Among Us is extremely old.",
 	"Press Alt + F4 to get 1 billion dollars on the spot.",
 	"Press U to walk forward.",
 	"At the time of writing this fun fact list, there are 6 people in the server.",
-	"ChatBot was first tested in the game: a literal baseplate.",
 	"I found a lucky penny!",
 	"You found this fun fact.",
 	"The sandwich was invented in the 1700s.",
@@ -94,13 +98,36 @@ local chatEvents = game:GetService("ReplicatedStorage"):WaitForChild("DefaultCha
 local messageDoneFiltering = chatEvents:WaitForChild("OnMessageDoneFiltering")
 
 local commandsMessage = {
-	"cmds, reset, say <message>, pick <options>, dance, whitelist <player>, blacklist <player>, coinflip, random <min> <max>, bring, walkto <player>, setprefix <newPrefix>",
- "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
-	"setstatus <newStatus>, clearStatus, point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, disablecommand <command>, jump, follow, unfollow",
-	"salute, announce <announcement>, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
-	"lua <lua>, ping, catch <player>, copychat <player>, cheer, stadium",
- "ALL COMMANDS ARE WRITTEN WITH A EXCLAMATION MARK(!).FOR EXAMPLE: (!sit)",
+    "ALL COMMANDS ARE WRITTEN WITH A SLASH (/) FOR EXAMPLE: (/dance)",
+    wait(3)
+	"cmds, reset, say <message>, pick <options>, dance, coinflip, random <min> <max>, bring, walkto <player>",
+	wait(5)
+	"point, wave, funfact, time, speed, fps, sit, rush, randommove, randomplayer, rickroll, jump, follow, unfollow",
+	wait(8)
+	"salute, help <command>, jobid, aliases <command>, math <operation> <nums>, changelogs, gamename, playercount, maxplayers, toggleall, setinterval, executor",
+	wait(8)
+	"ping, catch <player>, copychat <player>, cheer, stadium, spin <speed>, float <height>, orbit <speed> <radius>, rejoin",
+	wait(8)
 }
+
+local orbitcon
+
+local function orbit(target, speed, radius)
+	local r = tonumber(radius) or 10
+	local rps = tonumber(speed) or math.pi
+	local orbiter = bot.Character.HumanoidRootPart
+	local angle = 0
+	orbitcon = game:GetService("RunService").Heartbeat:Connect(function(dt)
+		if not target.Character then return end
+		origin = target.Character.HumanoidRootPart.CFrame
+		angle = (angle + dt * rps) % (2 * math.pi)
+		orbiter.CFrame = origin * CFrame.new(math.cos(angle) * r, 0, math.sin(angle) * r)
+	end)
+end
+
+local function unorbit()
+	orbitcon:Disconnect()
+end
 
 local commands --don't change, could lead to errors
 
@@ -139,7 +166,7 @@ commands = {
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
 					chat(cmd)
-					wait(7)
+					wait(0.5)
 				end
 			end)
 		end,
@@ -203,7 +230,7 @@ commands = {
 	reset = {
 		Name = "reset",
 		Aliases = {"re"},
-		Use = "Respawns ChatBot!",
+		Use = "Respawns SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local hum = bot.Character:FindFirstChildWhichIsA("Humanoid")
@@ -213,10 +240,29 @@ commands = {
 			end
 		end,
 	},
+	rejoin = {
+		Name = "rejoin",
+		Aliases = {"rj"},
+		Use = "Rejoins SemoofBot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			if speaker ~= bot.Name and altctrl == false then chat("Invalid permissions to rejoin.") return end
+		
+			if #game.Players:GetPlayers() <= 1 then
+				print("Rejoining (NEW SERVER)")
+				game.Players.LocalPlayer:Kick("\nSemoofBot - Rejoining...")
+				wait()
+				game:GetService('TeleportService'):Teleport(game.PlaceId, game.Players.LocalPlayer)
+			else
+				print("SemoofBot is rejoining...")
+				game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, game.Players.LocalPlayer)
+			end
+		end,
+	},
 	catch = {
 		Name = "catch",
 		Aliases = {"catchin4k", "c14"},
-		Use = "Makes ChatBot catch the given player in 4K!",
+		Use = "Makes SemoofBot catch the given player in 4K!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local plr
@@ -242,14 +288,14 @@ commands = {
 			
 			if plr then
 				bot.Character:SetPrimaryPartCFrame(CFrame.new(plr.Character.HumanoidRootPart.Position))
-				chat("📸 CAUGHT IN 4K BY CHATBOT 📸")
+				chat("📸 CAUGHT IN 4K BY SEMOOFBOT 📸")
 			end
 		end,
 	},
 	ping = {
 		Name = "ping",
 		Aliases = {"getping"},
-		Use = "Chats ChatBot's ping!",
+		Use = "Chats SemoofBot's ping!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			chat("Ping: " .. tostring(math.floor(game:GetService("Stats").PerformanceStats.Ping:GetValue() + 0.5)) .. " ms")
@@ -258,7 +304,7 @@ commands = {
 	executor = {
 		Name = "executor",
 		Aliases = {"identifyexecutor", "getexec", "exec"},
-		Use = "Gives you the executor that is running ChatBot!",
+		Use = "Gives you the executor that is running SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			chat("Executor: " .. identifyexecutor() or "Unknown")
@@ -267,11 +313,11 @@ commands = {
 	lua = {
 		Name = "lua",
 		Aliases = {"runlua", "run", "luau"},
-		Use = "Gives you the executor that is running ChatBot!",
+		Use = "Gives you the executor that is running SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			if speaker ~= bot.Name then
-				chat("You do not have permission to run LuaU from ChatBot.")
+				chat("You do not have permission to run LuaU from SemoofBot.")
 				return
 			end
 			
@@ -291,7 +337,7 @@ commands = {
 	setinterval = {
 		Name = "setinterval",
 		Aliases = {"setrandommoveinterval", "setint", "setinteger"},
-		Use = "Respawns ChatBot!",
+		Use = "Respawns SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			if speaker ~= bot.Name then return end
@@ -305,7 +351,7 @@ commands = {
 	toggleall = {
 		Name = "toggleall",
 		Aliases = {"all", "allwl", "wlall"},
-		Use = "Respawns ChatBot!",
+		Use = "Respawns SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
@@ -349,7 +395,7 @@ commands = {
 	unfollow = {
 		Name = "unfollow",
 		Aliases = {"unfollowplr"},
-		Use = "Respawns ChatBot!",
+		Use = "Respawns SemoofBot!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -364,7 +410,7 @@ commands = {
 	follow = {
 		Name = "follow",
 		Aliases = {"followplr"},
-		Use = "Makes ChatBot follow you or the given player!",
+		Use = "Makes SemoofBot follow you or the given player!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local plr
@@ -418,7 +464,7 @@ commands = {
 			
 			if not speakerplayer then return end
 			
-			chat(speakerplayer.DisplayName .. ": " .. tosay)
+			if altctrl then chat(tosay) else chat(speakerplayer.DisplayName .. ": " .. tosay) end
 		end,
 	},
 	pick = {
@@ -438,14 +484,14 @@ commands = {
 			local chosen = choosefrom[math.random(1, #choosefrom)]
 			
 			if chosen then
-				chat("ChatBot chose: " .. chosen)
+				chat("SemoofBot chose: " .. chosen)
 			end
 		end,
 	},
 	dance = {
 		Name = "dance",
 		Aliases = {},
-		Use = "Makes ChatBot dance!",
+		Use = "Makes SemoofBot dance!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game:GetService("Players"):Chat("/e dance")
@@ -454,7 +500,7 @@ commands = {
 	point = {
 		Name = "point",
 		Aliases = {},
-		Use = "Makes ChatBot point!",
+		Use = "Makes SemoofBot point!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game:GetService("Players"):Chat("/e point")
@@ -463,7 +509,7 @@ commands = {
 	stadium = {
 		Name = "stadium",
 		Aliases = {},
-		Use = "Makes ChatBot do the stadium emote!",
+		Use = "Makes SemoofBot do the stadium emote!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game:GetService("Players"):Chat("/e stadium")
@@ -472,7 +518,7 @@ commands = {
 	cheer = {
 		Name = "cheer",
 		Aliases = {},
-		Use = "Makes ChatBot cheer!",
+		Use = "Makes SemoofBot cheer!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game:GetService("Players"):Chat("/e cheer")
@@ -481,7 +527,7 @@ commands = {
 	wave = {
 		Name = "wave",
 		Aliases = {},
-		Use = "Makes ChatBot wave!",
+		Use = "Makes SemoofBot wave!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game:GetService("Players"):Chat("/e wave")
@@ -490,7 +536,7 @@ commands = {
 	sit = {
 		Name = "sit",
 		Aliases = {},
-		Use = "Makes ChatBot sit!",
+		Use = "Makes SemoofBot sit!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			bot.Character.Humanoid.Sit = true
@@ -499,7 +545,7 @@ commands = {
 	salute = {
 		Name = "salute",
 		Aliases = {},
-		Use = "Makes ChatBot salute!",
+		Use = "Makes SemoofBot salute!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			game.Players:Chat("/e salute")
@@ -508,7 +554,7 @@ commands = {
 	jump = {
 		Name = "jump",
 		Aliases = {},
-		Use = "Makes ChatBot jump!",
+		Use = "Makes SemoofBot jump!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			bot.Character.Humanoid.Jump = true
@@ -532,7 +578,7 @@ commands = {
 	whitelist = {
 		Name = "whitelist",
 		Aliases = {"wl"},
-		Use = "Whitelists a player, meaning they can use ChatBot. An owner-only command!",
+		Use = "Whitelists a player, meaning they can use SemoofBot. An owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local towhitelist = args[2]
@@ -543,19 +589,19 @@ commands = {
 				if towhitelist == "all" then
 					for i, player in pairs(game.Players:GetPlayers()) do
 						table.insert(whitelisted, player.Name)
-						local bl = player:FindFirstChild("ChatBotBlacklist")
+						local bl = player:FindFirstChild("SemoofBotBlacklist")
 						if bl then bl:Destroy() else warn(player.DisplayName .. " was not blacklisted!") end
 					end
 					
 					allwhitelisted = true
 					
-					chat("Whitelisted all players that are currently in the game! Type .cmds to view commands.")
+					chat("Whitelisted all players that are currently in the game! Type /cmds to view commands.")
 				else
 					local plr = searchPlayers(towhitelist)
 					
 					if plr then
 						table.insert(whitelisted, plr.Name)
-						local bl = plr:FindFirstChild("ChatBotBlacklist")
+						local bl = plr:FindFirstChild("SemoofBotBlacklist")
 						if bl then bl:Destroy() else warn(player.DisplayName .. " was not blacklisted!") end
 						chat("Whitelisted " .. plr.DisplayName .. "! Type .cmds to view commands.")
 					else
@@ -568,7 +614,7 @@ commands = {
 	blacklist = {
 		Name = "blacklist",
 		Aliases = {"bl"},
-		Use = "Blacklists a player meaning they cannot use ChatBot. Owner-only command!",
+		Use = "Blacklists a player meaning they cannot use SemoofBot. Owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			local toblacklist = args[2]
@@ -578,13 +624,13 @@ commands = {
 			if toblacklist then
 				if toblacklist == "all" then
 					for i, p in pairs(game.Players:GetPlayers()) do
-						local alrbl = p:FindFirstChild("ChatBotBlacklist")
+						local alrbl = p:FindFirstChild("SemoofBotBlacklist")
 						
 						if alrbl then alrbl:Destroy() end
 					
 						local new = Instance.new("BoolValue")
 						new.Parent = p
-						new.Name = "ChatBotBlacklist"
+						new.Name = "SemoofBotBlacklist"
 						new.Value = true
 					end
 					
@@ -595,13 +641,13 @@ commands = {
 					local plr = searchPlayers(toblacklist)
 					
 					if plr then
-						local alrbl = plr:FindFirstChild("ChatBotBlacklist")
+						local alrbl = plr:FindFirstChild("SemoofBotBlacklist")
 						
 						if alrbl then alrbl:Destroy() end
 					
 						local new = Instance.new("BoolValue")
 						new.Parent = plr
-						new.Name = "ChatBotBlacklist"
+						new.Name = "SemoofBotBlacklist"
 						new.Value = true
 						alwhitelisted = false
 						chat("Blacklisted " .. plr.DisplayName .. "! They can no longer run commands.")
@@ -639,7 +685,7 @@ commands = {
 				local rnd = math.random(tonumber(args[2]), tonumber(args[3]))
 				
 				if rnd then
-					chat("ChatBot // Generated random number between " .. args[2] .. " and " .. args[3] .. ": " .. rnd)
+					chat("SemoofBot // Generated random number between " .. args[2] .. " and " .. args[3] .. ": " .. rnd)
 				else
 					chat("Aw, snap! An error occured while generating a random number.")
 				end
@@ -649,7 +695,7 @@ commands = {
 	bring = {
 		Name = "bring",
 		Aliases = {},
-		Use = "Brings ChatBot to the player that chatted the command.",
+		Use = "Brings SemoofBot to the player that chatted the command.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -664,7 +710,7 @@ commands = {
 	copychat = {
 		Name = "copychat",
 		Aliases = {"cc", "copyc", "cchat"},
-		Use = "Makes ChatBot copy everything the given player says.",
+		Use = "Makes SemoofBot copy everything the given player says.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -692,7 +738,7 @@ commands = {
 	uncopychat = {
 		Name = "uncopychat",
 		Aliases = {"uncc", "uncopyc", "uncchat"},
-		Use = "Makes ChatBot stop copying everything the copychat player says.",
+		Use = "Makes SemoofBot stop copying everything the copychat player says.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -700,7 +746,7 @@ commands = {
 					chat("Stopped copying " .. copychatplayer.DisplayName .. "!")
 					copychatplayer = nil
 				else
-					chat("ChatBot is not copying anyone!")
+					chat("SemoofBot is not copying anyone!")
 				end
 			end)
 		end,
@@ -708,7 +754,7 @@ commands = {
 	to = {
 		Name = "to",
 		Aliases = {},
-		Use = "Teleports ChatBot to the <player> given.",
+		Use = "Teleports SemoofBot to the <player> given.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -735,7 +781,7 @@ commands = {
 	walkto = {
 		Name = "walkto",
 		Aliases = {"come"},
-		Use = "Makes ChatBot walk to you or the given player!",
+		Use = "Makes SemoofBot walk to you or the given player!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -760,7 +806,7 @@ commands = {
 	setprefix = {
 		Name = "setprefix",
 		Aliases = {"prefix"},
-		Use = "Sets the prefix of ChatBot! Owner-only command!",
+		Use = "Sets the prefix of SemoofBot! Owner-only command!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -781,7 +827,7 @@ commands = {
 	setstatus = {
 		Name = "setstatus",
 		Aliases = {},
-		Use = "Sets the status of ChatBot. When a status is set, the bot will no longer take commands.",
+		Use = "Sets the status of SemoofBot. When a status is set, the bot will no longer take commands.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -828,11 +874,11 @@ commands = {
 	time = {
 		Name = "time",
 		Aliases = {"currenttime"},
-		Use = "Gives you ChatBot's current time in its timezone.",
+		Use = "Gives you SemoofBot's current time in its timezone.",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
-				chat("ChatBot's current time is: " .. os.date("%I:%M:%S %p"))
+				chat("SemoofBot's current time is: " .. os.date("%I:%M:%S %p"))
 			end)
 		end,
 	},
@@ -860,7 +906,7 @@ commands = {
 	walkspeed = {
 		Name = "walkspeed",
 		Aliases = {"speed"},
-		Use = "Sets ChatBot's walkspeed to <speed>!",
+		Use = "Sets SemoofBot's walkspeed to <speed>!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -881,11 +927,11 @@ commands = {
 	fps = {
 		Name = "fps",
 		Aliases = {},
-		Use = "Chats ChatBot's current FPS!",
+		Use = "Chats SemoofBot's current FPS!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
-				chat("ChatBot's FPS is: " .. tostring(math.round(game.Workspace:GetRealPhysicsFPS())))
+				chat("SemoofBot's FPS is: " .. tostring(math.round(game.Workspace:GetRealPhysicsFPS())))
 			end)
 		end,
 	},
@@ -1013,7 +1059,7 @@ commands = {
 	randommove = {
 		Name = "randommove",
 		Aliases = {"rndmove", "autowalk"},
-		Use = "Toggles ChatBot's random movement feature!",
+		Use = "Toggles SemoofBot's random movement feature!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -1030,7 +1076,7 @@ commands = {
 	rush = {
 		Name = "rush",
 		Aliases = {"rushbegin"},
-		Use = "Makes ChatBot turn into Rush from DOORS!",
+		Use = "Makes SemoofBot turn into Rush from DOORS!",
 		Enabled = true,
 		CommandFunction = function(msg, args, speaker)
 			pcall(function()
@@ -1051,6 +1097,103 @@ commands = {
 			end)
 		end,
 	},
+	altcontrol = {
+		Name = "altcontrol",
+		Aliases = {"altctrl"},
+		Use = "Removes the name from the .say command.",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				altctrl = true
+				chat("Enabled alt control mode!")
+			end)
+		end,
+	},
+	spin = {
+		Name = "spin",
+		Aliases = {"rotate"},
+		Use = "Makes the bot spin!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local pwr = 100
+				
+				if args[2] and tonumber(args[2]) then pwr = tonumber(args[2]) end
+			
+				local already = bot.Character.HumanoidRootPart:FindFirstChild("Spinner")
+				
+				if already then already:Destroy() end
+			
+				local spinner = Instance.new("BodyAngularVelocity")
+				spinner.Name = "Spinner"
+				spinner.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+				spinner.MaxTorque = Vector3.new(0,math.huge,0)
+				spinner.AngularVelocity = Vector3.new(0,pwr,0)
+			end)
+		end,
+	},
+	unspin = {
+		Name = "unspin",
+		Aliases = {"unrotate"},
+		Use = "Stops the spinning bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local spinner = game.Players.LocalPlayer.Character.HumanoidRootPart:FindFirstChild("Spinner")
+				if spinner then spinner:Destroy() end
+			end)
+		end,
+	},
+	float = {
+		Name = "float",
+		Aliases = {"levitate"},
+		Use = "Floats the bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local f = 9
+				if args[2] and tonumber(args[2]) then f = tonumber(args[2]) end
+				bot.Character.Humanoid.HipHeight = f
+			end)
+		end,
+	},
+	unfloat = {
+		Name = "unfloat",
+		Aliases = {"unlevitate"},
+		Use = "Unfloats the bot!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				bot.Character.Humanoid.HipHeight = HH
+			end)
+		end,
+	},
+	orbit = {
+		Name = "orbit",
+		Aliases = {"orbit"},
+		Use = "Orbits the bot around you!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				local player = game.Players:FindFirstChild(speaker)
+				
+				if not player then return end
+			
+				orbit(player, args[2], args[3])
+			end)
+		end,
+	},
+	unorbit = {
+		Name = "unorbit",
+		Aliases = {"unorbit"},
+		Use = "Halts the orbit!",
+		Enabled = true,
+		CommandFunction = function(msg, args, speaker)
+			pcall(function()
+				unorbit()
+			end)
+		end,
+	},
 }
 
 local cmdcon = messageDoneFiltering.OnClientEvent:Connect(function(data)
@@ -1064,7 +1207,7 @@ local cmdcon = messageDoneFiltering.OnClientEvent:Connect(function(data)
 	local msg = string.lower(message)
 	
 	if string.sub(msg, 1, 1) == prefix then
-		if speakerplayer:FindFirstChild("ChatBotBlacklist") then
+		if speakerplayer:FindFirstChild("SemoofBotBlacklist") then
 			return
 		end
 
@@ -1081,14 +1224,14 @@ local cmdcon = messageDoneFiltering.OnClientEvent:Connect(function(data)
 		local cmd = checkCommands(args[1])
 		
 		if status ~= nil and speaker ~= bot.Name then
-			chat("ChatBot Status // " .. status .. " // Commands are disabled.")
+			chat("SemoofBot Status // " .. status .. " // Commands are disabled.")
 			return
 		end
 		
 		if cmd ~= nil then
 			if cmd.Enabled == false then
 				chat("The command " .. cmd.Name .. " is currently disabled. Please request it to be re-enabled by " .. bot.DisplayName .. ".")
-				print("ChatBot CMDLogs // " .. speaker .. " attempted to run command: " .. cmd.Name .. " with arguments: " .. tts(args) .. "while the command was disabled.")
+				print("SemoofBot CMDLogs // " .. speaker .. " attempted to run command: " .. cmd.Name .. " with arguments: " .. tts(args) .. "while the command was disabled.")
 				return
 			else
 				cmd.CommandFunction(message, args, speaker)
@@ -1103,30 +1246,30 @@ local cmdcon = messageDoneFiltering.OnClientEvent:Connect(function(data)
 					return r
 				end
 				
-				print("ChatBot CMDLogs // " .. speaker .. " ran command: " .. cmd.Name .. " with arguments: " .. tts(args))
+				print("SemoofBot CMDLogs // " .. speaker .. " ran command: " .. cmd.Name .. " with arguments: " .. tts(args))
 			end
 		else
 			warn("Could not find command: " .. args[1] .. "!")
 		end
 	elseif speakerplayer == copychatplayer then
-		chat(speakerplayer.DisplayName .. ": " .. message)
+		if altctrl then chat(message) else chat(speakerplayer.DisplayName .. ": " .. message) end
 	end
 end)
 
 bot.Chatted:Connect(function(msg)
-	if (string.lower(msg) == "Chat.disable()" or string.lower(msg) == "Chat.disconnect()") and disconnected == false then
+	if (string.lower(msg) == "semoof.disable()" or string.lower(msg) == "semoof.disconnect()") and disconnected == false then
 		cmdcon:Disconnect()
 		disconnected = true
 		wait()
-		chat("Successfully disconnected ChatBot.")
+		chat("Successfully disconnected SemoofBot.")
 	end
 end)
 
-local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (Chat and Chat.request) or nil
+local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (semoof and semoof.request) or nil
 
 if req ~= nil then
 	req({
-	    Url = "https://discord.com/api/webhooks/1090766034157457408/L0sKAV3VgwhDr4oKFN2GK90dRBQfhDDoePASEzz6czZCucfEKLWc79ukdUWHxuYj07ot",
+	    Url = "https://discord.com/api/webhooks/1115008931543130332/3EXzYNrY665MAkyedMwdImDNzP0hcf7zHJuEgB32S7VQ_zCzMRS4L7bk_hNa0l6MXwNz",
 	    Method = "POST",
 	    Headers = {
 		["Content-Type"] = "application/json"
@@ -1134,10 +1277,10 @@ if req ~= nil then
 	    Body = game.HttpService:JSONEncode({
 		content = "<@1090754290500505720>",
 		embeds = {
-			title = "ChatBot Execution",
-			description = "ChatBot has been executed by " .. bot.DisplayName .. "!",
+			title = "SemoofBot Execution",
+			description = "SemoofBot has been executed by " .. bot.DisplayName .. "!",
 			color = 0xAADDFF,
-			author = "ChatBot Execution Bot",
+			author = "SemoofBot Execution Bot",
 			fields = {
 				{name = "User ID", value = bot.UserId, inline = true},
 				{name = "Name", value = bot.Name, inline = true},
@@ -1149,15 +1292,15 @@ if req ~= nil then
 end
 
 task.spawn(function()
-	chat("ChatBot " .. Chatbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
+	chat("SemoofBot " .. semoofbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
 	wait(0.1)
 	chat("You can now control this client! Type " .. prefix .. "cmds to view commands.")
 end)
 
 task.spawn(function()
-	while wait(300) do
+	while wait(1000) do
 		if disconnected == false then
-			chat("ChatBot is currently active! Type " .. prefix .. "cmds to view commands.")
+			chat("SemoofBot is currently active! Type " .. prefix .. "cmds to view commands.")
 		end
 	end
 end)
@@ -1193,4 +1336,4 @@ task.spawn(function()
 			end
 		end
 	end
-end)
+end) 
