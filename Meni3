@@ -31,15 +31,16 @@ function typewrite(text, instant)
     end
 end
 
-local one = "Control my avatar say /page1, /page2, /page3, /page4 to see commands"
+local one = "Control my avatar say /page1, /page2, /page3, /page4, /page5, /page6, /page7 to see commands"
 typewrite(one, false)
 
-local page1 = "[Page1]\n/cmds, /altcontrol, /reset, /say <message>, /pick <options>, /dance"
+local page1 = "[Page1]\n/cmds, /reset, /say <message>, /pick <options>, /dance"
 local page2 = "[Page2]\n/coinflip, /random <min> <max>, /bring, /walkto <player>"
-local page3 = "[Page3]\n/point, /wave, /funfact, /time, /speed, /fps, /sit, /rush, /randommove, /randomplayer, /rickroll, /jump, /follow, /unfollow"
+local page3 = "[Page3]\n/point, /wave, /funfact, /time, /speed, /fps, /sit, /rush, /randommove, /randomplayer"
 local page4 = "[Page4]\n/salute, /help <command>, /jobid, /aliases <command>, /math <operation> <nums>"
-local page4 = "[Page5]\n/changelogs, /gamename, /playercount, /maxplayers, /toggleall, /setinterval, /executor"
-local page4 = "[Page6]\n/ping, /catch <player>, /copychat <player>, /cheer, /stadium, /spin <speed>, /float <height>, /orbit <speed> <radius>, /rejoin"
+local page5 = "[Page5]\n/changelogs, /gamename, /playercount, /maxplayers, /toggleall, /setinterval, /executor"
+local page6 = "[Page6]\n/ping, /catch <player>, /copychat <player>, /cheer, /stadium, /spin <speed>"
+local page7 = "[Page7]\n/rickroll, /jump, /follow, /unfollow, /float <height>, /orbit <speed> <radius>, /rejoin"
 local currentPage = 1
 
 function switchPage(page)
@@ -55,6 +56,8 @@ function switchPage(page)
         typewrite(page5, true)
     elseif page == 6 then
         typewrite(page6, true)
+    elseif page == 7 then
+        typewrite(page7, true)
     end
 end
 
@@ -67,6 +70,7 @@ function onPlayerChatted(message, player)
         local command = string.sub(message, 2)
         if command == "page1" then
             acceptCommands = false
+            currentPage = 1
             switchPage(currentPage)
             wait(8)
             typewrite(one, false)
@@ -102,6 +106,13 @@ function onPlayerChatted(message, player)
         elseif command == "page6" then
             acceptCommands = false
             currentPage = 6
+            switchPage(currentPage)
+            wait(8)
+            typewrite(one, false)
+            acceptCommands = true
+        elseif command == "page7" then
+            acceptCommands = false
+            currentPage = 7
             switchPage(currentPage)
             wait(8)
             typewrite(one, false)
