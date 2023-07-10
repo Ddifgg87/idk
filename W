@@ -118,7 +118,7 @@ b:Button("Bot",function()
 local bootTime = os.time()
 local disconnected = false
 
-local altctrl = _G.ALTCTRL
+local altctrl = false
 local SPIN_POWER = 100
 local FLOAT_HEIGHT = 9
 
