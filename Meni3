@@ -31,16 +31,16 @@ function typewrite(text, instant)
     end
 end
 
-local one = "Control my avatar say /page1, /page2, /page3, /page4, /page5, /page6, /page7 to see commands"
+local one = "Control my avatar say /page(1-7) to see commands"
 typewrite(one, false)
 
-local page1 = "[Page1]\n/cmds, /reset, /say <message>, /pick <options>, /dance"
+local page1 = "[Page1]\n/cmds, /reset, /say <message>, /pick <options>, /dance, /rickroll"
 local page2 = "[Page2]\n/coinflip, /random <min> <max>, /bring, /walkto <player>"
 local page3 = "[Page3]\n/point, /wave, /funfact, /time, /speed, /fps, /sit, /rush, /randommove, /randomplayer"
 local page4 = "[Page4]\n/salute, /help <command>, /jobid, /aliases <command>, /math <operation> <nums>"
 local page5 = "[Page5]\n/changelogs, /gamename, /playercount, /maxplayers, /toggleall, /setinterval, /executor"
 local page6 = "[Page6]\n/ping, /catch <player>, /copychat <player>, /cheer, /stadium, /spin <speed>"
-local page7 = "[Page7]\n/rickroll, /jump, /follow, /unfollow, /float <height>, /orbit <speed> <radius>, /rejoin"
+local page7 = "[Page7]\n/jump, /follow, /unfollow, /float <height>, /orbit <speed> <radius>, /rejoin"
 local currentPage = 1
 
 function switchPage(page)
