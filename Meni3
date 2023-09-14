@@ -31,7 +31,7 @@ function typewrite(text, instant)
     end
 end
 
-local one = "Control my avatar say /page(1-7) to see commands"
+local one = "Control my avatar say /page1-7 to see commands"
 typewrite(one, false)
 
 local page1 = "[Page1]\n/cmds, /reset, /say <message>, /pick <options>, /dance, /rickroll"
@@ -294,7 +294,7 @@ commands = {
 		Name = "cmds",
 		Aliases = {"commands"},
 		Use = "Lists all commands!",
-		Enabled = true,
+		Enabled = false,
 		CommandFunction = function(msg, args, speaker)
 			task.spawn(function()
 				for i, cmd in pairs(commandsMessage) do
@@ -1427,13 +1427,13 @@ end
 task.spawn(function()
 	chat("SemoofBot " .. semoofbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
 	wait(0.1)
-	chat("You can now control this client! Type " .. prefix .. "cmds to view commands.")
+	chat("You can now control this client! Type " .. prefix .. "page1-7 to view commands.")
 end)
 
 task.spawn(function()
-	while wait(1000) do
+	while wait(10000) do
 		if disconnected == false then
-			chat("SemoofBot is currently active! Type " .. prefix .. "cmds or /control to view commands.")
+			chat("SemoofBot is currently active! Type " .. prefix .. "page1-7 to view commands.")
 		end
 	end
 end)
