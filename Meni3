@@ -1,3 +1,20 @@
+-- Получаем сервисы
+local players = game:GetService("Players")
+local spawnService = game:GetService("SpawnService")
+
+-- Функция для установки точки возрождения на текущем местоположении игрока
+local function setSpawnpoint(player)
+    local character = player.Character
+    if character then
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        
+        -- Создаем новую точку возрождения
+        local spawnpoint = Instance.new("SpawnLocation")
+        spawnpoint.Position = humanoidRootPart.Position
+        spawnpoint.Parent = spawnService
+    end
+end
+
 -- Скрипт 1
 local function script1Function()
     local imageIndex = 1 -- Индекс изображения
@@ -1473,5 +1490,6 @@ end)
 end
 
 -- Вызов функций
+setSpawnpoint(player)
 script1Function()
 script2Function()
