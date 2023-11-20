@@ -72,49 +72,49 @@ function onPlayerChatted(message, player)
             acceptCommands = false
             currentPage = 1
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page2" then
             acceptCommands = false
             currentPage = 2
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page3" then
             acceptCommands = false
             currentPage = 3
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page4" then
             acceptCommands = false
             currentPage = 4
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page5" then
             acceptCommands = false
             currentPage = 5
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page6" then
             acceptCommands = false
             currentPage = 6
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         elseif command == "page7" then
             acceptCommands = false
             currentPage = 7
             switchPage(currentPage)
-            wait(8)
+            wait(9)
             typewrite(one, false)
             acceptCommands = true
         end
