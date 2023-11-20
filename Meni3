@@ -1,17 +1,18 @@
 -- Получаем сервисы
-local players = game:GetService("Players")
-local spawnService = game:GetService("SpawnService")
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
 
--- Функция для установки точки возрождения на текущем местоположении игрока
+-- Функция для установки spawnpoint на текущем месте игрока
 local function setSpawnpoint(player)
     local character = player.Character
-    if character then
-        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        
-        -- Создаем новую точку возрождения
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
         local spawnpoint = Instance.new("SpawnLocation")
-        spawnpoint.Position = humanoidRootPart.Position
-        spawnpoint.Parent = spawnService
+        spawnpoint.Position = humanoid.Parent.PrimaryPart.Position
+        spawnpoint.Parent = Workspace
+
+        player:SetSpawnLocation(spawnpoint)
     end
 end
 
