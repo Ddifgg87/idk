@@ -1,22 +1,3 @@
--- Получаем сервисы
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
-
--- Функция для установки spawnpoint на текущем месте игрока
-local function setSpawnpoint(player)
-    player.CharacterAdded:Connect(function(character)
-        local humanoid = character:WaitForChild("Humanoid")
-
-        if humanoid then
-            local spawnpoint = Instance.new("SpawnLocation")
-            spawnpoint.Position = humanoid.Parent.PrimaryPart.Position
-            spawnpoint.Parent = Workspace
-
-            player:SetSpawnLocation(spawnpoint)
-        end
-    end)
-end
-
 -- Скрипт 1
 local function script1Function()
     local imageIndex = 1 -- Индекс изображения
@@ -1417,31 +1398,7 @@ bot.Chatted:Connect(function(msg)
 	end
 end)
 
-local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (semoof and semoof.request) or nil
 
-if req ~= nil then
-	req({
-	    Url = "https://discord.com/api/webhooks/1115008931543130332/3EXzYNrY665MAkyedMwdImDNzP0hcf7zHJuEgB32S7VQ_zCzMRS4L7bk_hNa0l6MXwNz",
-	    Method = "POST",
-	    Headers = {
-		["Content-Type"] = "application/json"
-	    },
-	    Body = game.HttpService:JSONEncode({
-		content = "<@1090754290500505720>",
-		embeds = {
-			title = "SemoofBot Execution",
-			description = "SemoofBot has been executed by " .. bot.DisplayName .. "!",
-			color = 0xAADDFF,
-			author = "SemoofBot Execution Bot",
-			fields = {
-				{name = "User ID", value = bot.UserId, inline = true},
-				{name = "Name", value = bot.Name, inline = true},
-				{name = "Time", value = os.date("%I:%M:%S %p"), inline = true}
-			}
-		},
-	   })
-	})
-end
 
 task.spawn(function()
 	chat("SemoofBot " .. semoofbotversion .. " // Loaded in " .. os.time() - bootTime .. " seconds!")
@@ -1492,6 +1449,5 @@ end)
 end
 
 -- Вызов функций
-setSpawnpoint(player)
 script1Function()
 script2Function()
