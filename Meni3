@@ -34,13 +34,13 @@ end
 local one = "Control my avatar say /page1-7 to see commands"
 typewrite(one, false)
 
-local page1 = "[Page1]\n/reset, /say <message>, /pick <options>, /dance, /rickroll"
-local page2 = "[Page2]\n/coinflip, /random <min> <max>, /bring, /walkto <player>"
-local page3 = "[Page3]\n/point, /wave, /funfact, /time, /speed, /fps, /sit, /rush, /randommove, /randomplayer"
-local page4 = "[Page4]\n/salute, /help <command>, /jobid, /aliases <command>, /math <operation> <nums>"
-local page5 = "[Page5]\n/changelogs, /gamename, /playercount, /maxplayers, /toggleall, /setinterval, /executor"
-local page6 = "[Page6]\n/ping, /catch <player>, /copychat <player>, /cheer, /stadium, /spin <speed>"
-local page7 = "[Page7]\n/jump, /follow, /unfollow, /float <height>, /orbit <speed> <radius>, /rejoin"
+local page1 = "[Page1]\n /reset, /say <message>, /pick <options>, /dance, /rickroll"
+local page2 = "[Page2]\n /coinflip, /random <min> <max>, /bring, /walkto <player>"
+local page3 = "[Page3]\n /point, /wave, /funfact, /time, /speed <0-∞>, /fps, /sit, /rush, /randommove, /randomplayer"
+local page4 = "[Page4]\n /salute, /help <command>, /math <operation> <nums>"
+local page5 = "[Page5]\n /gamename, /playercount, /maxplayers, /toggleall, /setinterval, /executor"
+local page6 = "[Page6]\n /ping, /catch <player>, /copychat <player>, /cheer, /stadium, /spin <speed>"
+local page7 = "[Page7]\n /jump, /follow, /unfollow, /float <height>, /orbit <speed> <radius>"
 local currentPage = 1
 
 function switchPage(page)
