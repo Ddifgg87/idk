@@ -31,7 +31,7 @@ function typewrite(text, instant)
     end
 end
 
-local one = "Control my avatar say /page1-7 to see commands"
+local one = "Control my avatar say /page<1-7> to see commands"
 typewrite(one, false)
 
 local page1 = "[Page1]\n /reset, /say <message>, /pick <options>, /dance, /rickroll"
